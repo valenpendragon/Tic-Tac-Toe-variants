@@ -49,7 +49,7 @@ wins['columns'] = {}      # Initialize the columns dictionary.
 wins['rows'] = {}         # Initialize the rows dictionary.
 wins['diagonals'] = {}    # Initialize the diagonals dictionary.
 
-print wins
+# print wins
 # There are only two diagonal, up and down. So, we will initialize them as empty sets.
 # We will initialize them at the innermost for loop below.
 wins['diagonals']['down'] = set()
@@ -111,5 +111,5 @@ for num in xrange(0, size**2):  # This is enough moves to fill the board.
     player_moves[player_turn].add((row,col))
     board_moves.discard((row,col))
     move_count += 1
-    move_count %= num_players
-    player_turn = players[move_count]    
+    next_player = move_count % num_players
+    player_turn = players[next_player]    
