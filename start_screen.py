@@ -8,10 +8,11 @@ def start_screen(size=3):
     '''
     # First, we make the top/bottom border. For now, it will use Bs for borders.
     # border_char is a constant that is used to build the borders of the cells.
-    border_char = 'B'
+    h_border_char = '_'  # This is the horizontal character used.
+    v_border_char = '|'  # This is the vertical character used.
     # reference_ruler_horiz allows us to check lengths and positions.
     reference_rule_horiz = '0123456789'*(size - 1)
-    horiz_border = border_char*((5*size) + 1)
+    horiz_border = h_border_char*((5*size) + 1)
     print reference_rule_horiz
     print horiz_border
     # Next, we need to create and print coordinate blocks.
@@ -21,16 +22,16 @@ def start_screen(size=3):
         # cells_row2 of each cell is the second line below the coord_block.
         # cells_row3 of each cell is the third (and last) line below the coord_block.
         # This initializes each line as the current row is constructed.
-        coord_block = cells_row1 = cells_row2 = cells_row3 = border_char
+        coord_block = cells_row1 = cells_row2 = cells_row3 = v_border_char
         for col in xrange(0,size):
-            new_cell_coord = "(" + str(row)+"," + str(col) + ")" + border_char
+            new_cell_coord = "(" + str(row)+"," + str(col) + ")" + v_border_char
             coord_block = coord_block + new_cell_coord
             # Create the empty cells
-            new_cell_row1 = ' '*5 + border_char
+            new_cell_row1 = ' '*5 + v_border_char
             cells_row1 = cells_row1 + new_cell_row1
-            new_cell_row2 = ' '*5 + border_char
+            new_cell_row2 = ' '*5 + v_border_char
             cells_row2 = cells_row2 + new_cell_row2
-            new_cell_row3 = ' '*5 + border_char
+            new_cell_row3 = ' '*5 + v_border_char
             cells_row3 = cells_row3 + new_cell_row3
         print coord_block
         print cells_row1
