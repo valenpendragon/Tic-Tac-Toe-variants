@@ -10,7 +10,12 @@ def print_board(moves,size):
     '''
     # First, we need to get the player names out of the dictionary.
     players = moves.keys()
-    print players
+    # Since dictionaries are mapptings, not ordered data objects, we need to print
+    # the first character of the player's name in a diamond shape in the square.
+    # This also opens the way for more than two players to play at some point.
+    # Note: This trick can be made into a for loop that will allow more than two players.
+    print players[0]+' is represented by '+players[0][0]
+    print players[1]+' is represented by '+players[1][0]
     
     # We make the top/bottom border. For now, it will use Bs for borders.
     # border_char is a constant that is used to build the borders of the cells.
@@ -20,7 +25,7 @@ def print_board(moves,size):
     # reference_ruler_horiz allows us to check lengths and positions.
     reference_rule_horiz = '0123456789'*(size - 1)
     horiz_border = h_border_char*((6*size) + 1)
-    print reference_rule_horiz
+    # print reference_rule_horiz
     # Next, we need to create and print coordinate blocks.
     print horiz_border
     for row in xrange(0,size):
@@ -35,24 +40,21 @@ def print_board(moves,size):
             coord_block = coord_block + new_cell_coord
             
             # Now, we need to know if the cell is empty.
-            if ((row,col) in moves[players[0]]):
-                # So, player1 has an X in the cell. This block creates it.
-                new_cell_row1 = ' X X '+ v_border_char
-                new_cell_row2 = '  X  '+ v_border_char
-                new_cell_row3 = ' X X '+ v_border_char
-            elif ((row,col) in moves[players[1]]):
-                # player2 controls this cell. This block puts an O in it.
-                new_cell_row1 = '  O  '+ v_border_char
-                new_cell_row2 = ' O O '+ v_border_char
-                new_cell_row3 = '  O  '+ v_border_char
-            else: # The cell is empty. This block add an empty cell.
-                new_cell_row1 = ' '*5 + v_border_char
-                new_cell_row2 = ' '*5 + v_border_char
-                new_cell_row3 = ' '*5 + v_border_char
-            # Now, we concatenate the cell contents with the rest of the row.
-            cells_row1 = cells_row1 + new_cell_row1
-            cells_row2 = cells_row2 + new_cell_row2
-            cells_row3 = cells_row3 + new_cell_row3
+            for i in xrange(0,1):
+                # This block created a block of the player's initial. This sets the first line.
+                # Note, this lays the ground work for allowing more than two players at some point.
+                if ((row,col) in moves[players[i]]):
+                    new_cell_row1 = ' '+players[i][0]*3+' '+ v_border_char
+                else:
+                    # The space is blank.
+                    new_cell_row1 = ' '*5 + v_border_char
+                # The remaining lines mimic the first line.
+                new_cell_row2 = new_cell_row1
+                new_cell_row3 = new_cell_row1
+                # Now, we concatenate the cell contents with the rest of the row.
+                cells_row1 = cells_row1 + new_cell_row1
+                cells_row2 = cells_row2 + new_cell_row2
+                cells_row3 = cells_row3 + new_cell_row3
         print coord_block
         print cells_row1
         print cells_row2
