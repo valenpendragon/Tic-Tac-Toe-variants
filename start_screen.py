@@ -18,8 +18,8 @@ def start_screen(size=3):
     for row in xrange(0,1):      # For now, this is just row 0.
         coord_block = border_char
         for col in xrange(0,size):
-            new_block = "(" + str(row)+"," + str(col) + ")" + border_char
-            coord_block = coord_block + new_block
+            new_cell_coord = "(" + str(row)+"," + str(col) + ")" + border_char
+            coord_block = coord_block + new_cell_coord
         print horiz_border
         print coord_block
     return
