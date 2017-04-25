@@ -16,10 +16,15 @@ def start_screen(size=3):
     print horiz_border
     # Next, we need to create and print coordinate blocks.
     for row in xrange(0,1):      # For now, this is just row 0.
-        coord_block = border_char
+        coord_block = border_char   # coord_block prints cell coordinates
+        cells_row1 = border_char    # cells_row1 prints 1st line of full cell row
         for col in xrange(0,size):
             new_cell_coord = "(" + str(row)+"," + str(col) + ")" + border_char
             coord_block = coord_block + new_cell_coord
-        print horiz_border
+            # Create the empty cells
+            new_cell_row1 = ' '*5 + border_char
+            cells_row1 = cells_row1 + new_cell_row1
         print coord_block
+        print cells_row1
+        print horiz_border
     return
