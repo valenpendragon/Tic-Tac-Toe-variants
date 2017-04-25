@@ -10,8 +10,15 @@ def start_screen(size=3):
     # border_char is a constant that is used to build the borders of the cells.
     border_char = 'B'
     # reference_ruler (horiz and vert) allows us to check lengths and positions.
-    reference_rule_horiz = '0123456789'*(int(size/2) + 1)
+    reference_rule_horiz = '0123456789'*(size - 1)
     top_bottom_border = border_char*((5*size) + 1)
-    print top_bottom_border
     print reference_rule_horiz
+    # Next, we need to create and print coordinate blocks.
+    coord_block = border_char
+    for row in xrange(0,1):      # For now, this is just row 0.
+        for col in xrange(0,size):
+            new_block = "(" + str(row)+"," + str(col) + ")" + border_char
+            coord_block = coord_block + new_block
+    print top_bottom_border
+    print coord_block
     return
