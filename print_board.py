@@ -39,22 +39,22 @@ def print_board(moves,size):
             new_cell_coord = "(" + str(row)+"," + str(col) + ")" + v_border_char
             coord_block = coord_block + new_cell_coord
             
-            # Now, we need to know if the cell is empty.
-            for i in xrange(0,1):
+            # Now, we need to know if the cell is empty. We set the empty_flag to True.
+            empty_flag = True
+            for i in xrange(0,2):
                 # This block created a block of the player's initial. This sets the first line.
                 # Note, this lays the ground work for allowing more than two players at some point.
                 if ((row,col) in moves[players[i]]):
                     new_cell_row1 = ' '+players[i][0]*3+' '+ v_border_char
-                else:
-                    # The space is blank.
-                    new_cell_row1 = ' '*5 + v_border_char
-                # The remaining lines mimic the first line.
-                new_cell_row2 = new_cell_row1
-                new_cell_row3 = new_cell_row1
-                # Now, we concatenate the cell contents with the rest of the row.
-                cells_row1 = cells_row1 + new_cell_row1
-                cells_row2 = cells_row2 + new_cell_row2
-                cells_row3 = cells_row3 + new_cell_row3
+                    empty_flag = False
+            if empty_flag == True: new_cell_row1 = ' '*5 + v_border_char
+            # The remaining lines mimic the first line.
+            new_cell_row2 = new_cell_row1
+            new_cell_row3 = new_cell_row1
+            # Now, we concatenate the cell contents with the rest of the row.
+            cells_row1 = cells_row1 + new_cell_row1
+            cells_row2 = cells_row2 + new_cell_row2
+            cells_row3 = cells_row3 + new_cell_row3
         print coord_block
         print cells_row1
         print cells_row2
