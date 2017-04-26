@@ -90,6 +90,7 @@ move_count = 0
 for num in xrange(0, size**2):  # This is enough moves to fill the board.
     # Print the board based on current moves
     print_board(player_moves, size)
+    
     print player_turn+", it is your turn. I will prompt you for row and column."
     print "Use single digits less than "+str(size)+". I will do the rest."
     row = raw_input("Which row?")
@@ -108,8 +109,45 @@ for num in xrange(0, size**2):  # This is enough moves to fill the board.
         print "That move is not available. Please try again."
         continue
     print "("+str(row)+","+str(col)+") is available."
+    # Record the player's move.
     player_moves[player_turn].add((row,col))
+    # Remove their choice from availale moves.
     board_moves.discard((row,col))
+    # Increment the move count
     move_count += 1
+    # Use the move count to determine the next player in the sequence.
     next_player = move_count % num_players
-    player_turn = players[next_player]    
+    player_turn = players[next_player]
+
+    for player in players:
+        # Now, we check to see if it is possible for either player to win with the moves that are
+        # left on the board. That is why the union of player_moves[player] with board_moves, 
+        # the remaining open cells, is checked for winning conditions. A False return means that
+        # the player cannot win.
+        if (win_check(player_moves[player].union(board_moves), wins) == False):
+            del can_win[player]
+            print player+" no longer has any moves that will win the game."
+            print can_win
+    if (len(can_win) == 0):
+        print_board(player_moves, size)
+        print "No players have moves that can win the game. This game is a draw."
+        break  # At this level, this break ends the outermost loop.
+    else:
+        # Before prompting the next player to take their turn, we need to see
+        # if any player has already won the game. That was the purpose of having "win condition" sets.
+        # We send to win_check the set of player's moves. wins is an argument as well. Since we 
+        # plan to check to see if any winning combinations remain, we need to make this process a 
+        # function, instead part of the main program. What this program does is check to see if
+        # any player won yet.
+        for player in players:
+            # First, we check to see if a win has occurred.
+            # if (win_check(player_moves[player], wins) == True):
+            if False == True:
+                print_board(player_moves, size)
+                print player+" is the winner."
+                break
+            else:
+                continue
+        else:
+            continue     # This ensures that the loop will continue when it should.
+    break # This ensures than any nested break leave the outermost loop as well.
