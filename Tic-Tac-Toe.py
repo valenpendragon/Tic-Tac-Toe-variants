@@ -95,9 +95,9 @@ for num in xrange(0, size**2):  # This is enough moves to fill the board.
         # the remaining open cells, is checked for winning conditions. A False return means that
         # the player cannot win.
         if (win_check(player_moves[player].union(board_moves), wins) == False):
-            del can_win[player]
-            print player+" no longer has any moves that will win the game."
-            print can_win
+            if ((player in can_win) == True):
+                del can_win[player]
+                print player+" no longer has any moves that will win the game."
     if (len(can_win) == 0):
         print_board(player_moves, size)
         print "No players have moves that can win the game. This game is a draw."
