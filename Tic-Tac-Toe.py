@@ -258,7 +258,7 @@ for move_count in xrange(0, size**2):  # This is enough moves to fill the board.
         continue
     col = raw_input("Which col?")
     col = int(col)
-        if ((col in range(0,size)) != True ):
+    if ((col in range(0,size)) != True ):
         print "({},{}) is not available. Please try again.".format(row,col)
         print "Available spaces: ", board_moves
         continue
