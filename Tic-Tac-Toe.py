@@ -6,11 +6,10 @@ if ((option == 'y') or (option == 'Y') or (option == 'yes')):
     # new_size is a str that will be passed to size as an integer.
     new_size = raw_input("The boards are square. Choose a size between 3 and 9:")
     size = int(new_size)
-    if size in range(3,10):
-        print "Thank you. Confirming that you wish a "+new_size+'x'+new_size+' board.'
-    else:
-        print new_size+' is an invalid board size. Exiting.'
-        quit()
+    while size not in range(3,10):
+        print new_size+' is an invalid board size. Please try again.'
+        new_size = raw_input("Choose a size between 3 and 9.")
+        size = int(new_size)
 else:
     print "Board will be the default size of 3x3"
     size = 3
@@ -26,13 +25,23 @@ print "Thank you. Confirming that the second player is "+player2
 print player1+' and '+player2+', I am initializing the game for you.'
 print "This will just take a moment."
 
-# Initializing player_moves. Note, they are empty sets.
+# Initializing player_moves. Note: This starts as a dictionary of empty sets.
 player_moves = {}
 player_moves[player1] = set()
 player_moves[player2] = set()
+# This is a quick initialization. A more general version supporting more players
+# will be created soon.
+players = [player1, player2]
 
 # We also need the number of players.
 num_players = len(players)
+
+# can_win is a very small dictionary with a player name matched to a True/False flag.
+# When a player is no longer able to win, their entry is removed from the dictionary.
+# Once the dictionary is empty, the game ends in a draw.
+can_win = {}                # Create the empty dictionary.
+for player in players:
+    can_win[player] = True  # Populate it with True values for each player.
 
 # Now, we need to create a dictionary of winning moves. This dictionary has three
 # levels of nesting. The outermost layer is "type of win". The key values are: columns,
@@ -57,7 +66,7 @@ board_moves = init_board(size)
 # player_turn tracks who is the next player to be asked for a move.
 player_turn = player1
 move_count = 0
-for num in xrange(0, size**2):  # This is enough moves to fill the board.
+for move_count in xrange(0, size**2):  # This is enough moves to fill the board.
     # Print the board based on current moves
     print_board(player_moves, size)
     
@@ -111,8 +120,7 @@ for num in xrange(0, size**2):  # This is enough moves to fill the board.
         # any player won yet.
         for player in players:
             # First, we check to see if a win has occurred.
-            # if (win_check(player_moves[player], wins) == True):
-            if False == True:
+            if (win_check(player_moves[player], wins) == True):
                 print_board(player_moves, size)
                 print player+" is the winner."
                 break
