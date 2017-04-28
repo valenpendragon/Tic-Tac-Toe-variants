@@ -13,10 +13,10 @@ def print_board(moves,size):
     # Since dictionaries are mapptings, not ordered data objects, we need to print
     # the first character of the player's name in a diamond shape in the square.
     # This also opens the way for more than two players to play at some point.
-    # Note: This trick can be made into a for loop that will allow more than two players.
-    print players[0]+' is represented by '+players[0][0]
-    print players[1]+' is represented by '+players[1][0]
-    
+    # This loop assigns all of the players to their first letter.
+    for i in xrange(0, len(players)):
+        print players[i]+' is represented by '+players[i][0]
+
     # We make the top/bottom border. For now, it will use Bs for borders.
     # border_char is a constant that is used to build the borders of the cells.
     h_border_char = '_'  # This is the horizontal character used.
@@ -41,7 +41,7 @@ def print_board(moves,size):
             
             # Now, we need to know if the cell is empty. We set the empty_flag to True.
             empty_flag = True
-            for i in xrange(0,2):
+            for i in xrange(0, len(players)):
                 # This block created a block of the player's initial. This sets the first line.
                 # Note, this lays the ground work for allowing more than two players at some point.
                 if ((row,col) in moves[players[i]]):

@@ -29,9 +29,9 @@ def print_board(moves,size):
     # Since dictionaries are mapptings, not ordered data objects, we need to print
     # the first character of the player's name in a diamond shape in the square.
     # This also opens the way for more than two players to play at some point.
-    # Note: This trick can be made into a for loop that will allow more than two players.
-    print players[0]+' is represented by '+players[0][0]
-    print players[1]+' is represented by '+players[1][0]
+    # This loop assigns all of the players to their first letter.
+    for i in xrange(0, len(players)):
+        print players[i]+' is represented by '+players[i][0]
     
     # We make the top/bottom border. For now, it will use Bs for borders.
     # border_char is a constant that is used to build the borders of the cells.
@@ -57,7 +57,7 @@ def print_board(moves,size):
             
             # Now, we need to know if the cell is empty. We set the empty_flag to True.
             empty_flag = True
-            for i in xrange(0,2):
+            for i in xrange(0, len(players)):
                 # This block created a block of the player's initial. This sets the first line.
                 # Note, this lays the ground work for allowing more than two players at some point.
                 if ((row,col) in moves[players[i]]):
@@ -177,6 +177,48 @@ def win_check(moves, winners):
     # If the execution made it past all of these tests, no winning combination has been found.
     return False
 
+def create_player_moves(size):
+    '''
+    This function takes an integer size. From there, it will prompt the players for how many players
+    actually want to play. It will allow up to size - 1 to give the players some chance of winning.
+    It will return an initialized player_moves dictionary. This dictionary maps the player's name
+    to a set of tuples (x,y) representing the two-dimensional coordinates of every move the player
+    will make in the game. player_moves does that for every player in the game.
+    INPUT: integer size for the size of the size x size board
+    OUTPUT: dictionary player_moves, initialized with all player names mapped to empty sets ready to 
+    receive their moves.
+    '''
+    # Initialize the player_moves dictionary.
+    player_moves = {}
+    max_players = size - 1
+    print "To increase the likelihood of a player winning, this game limits the number of"
+    print "players to one less than the size of the board."
+    num_players = 0
+    while (num_players < 2) or (num_players >= size):
+        if (size == 3):
+            print "Due to the small size of the board (3x3), this game will default to 2 players."
+            num_players = 2
+        else:
+            new_num = raw_input("Please choose a number between 2 and {0}: ".format(max_players))
+            num_players = int(new_num)
+    # Ordinals in Python seem to be a work in progress. Since the board is currently limited
+    # to 9 squares at most, this limits players ordinals to 1st through 8th (for now). So, we
+    # initialize a good list to use when addressing the players.
+    ordinal_words = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth']
+    
+    # Now, we initialize the player_moves dictionary. We need a name for each player, which
+    # will be added to the keys of the dictionary. Each name will be mapped to a set of tuples
+    # (currently empty), that stores that players moves throughout the game.
+    for num in xrange(0, num_players):
+        player = raw_input("What is the name of the "+ordinal_words[num]+" player? ")
+        player_moves[player] = set()
+        print "Confirming that the "+ordinal_words[num]+ " will be "+player
+    print player_moves
+    ready_to_play = 'n'
+    while (ready_to_play != 'y') and (ready_to_play != 'Y') and (ready_to_play != 'yes'):
+        ready_to_play = raw_input("Are all of the players ready to start? ")
+    return player_moves
+
 print "Hello. You have accessed Tic Tac Toe."
 print "The default board is 3x3 and the winner must control three"
 print "spaces in a row, column, or diagonal to win."
@@ -192,25 +234,14 @@ if ((option == 'y') or (option == 'Y') or (option == 'yes')):
 else:
     print "Board will be the default size of 3x3"
     size = 3
-# The size has been initialized. Next, it asks for player names. These will be
-# used to initial the dictionary player_moves. This dictionary is in the form
-# {'player1' : {set of moves}, 'player2' : {set of moves}}. These sets are key
-# to refreshing the board, determining wins, etc.
-player1 = raw_input("What is the name of the first player?")
-print "Thank you. Confirming that the first player is "+player1
-player2 = raw_input("what is the name of the second player?")
-print "Thank you. Confirming that the second player is "+player2
 
-print player1+' and '+player2+', I am initializing the game for you.'
-print "This will just take a moment."
-
-# Initializing player_moves. Note: This starts as a dictionary of empty sets.
-player_moves = {}
-player_moves[player1] = set()
-player_moves[player2] = set()
-# This is a quick initialization. A more general version supporting more players
-# will be created soon.
-players = [player1, player2]
+# The create_player_moves function initializes the dictionary that stores the 
+# player moves as sets of (x,y) tuples (coordinates) mapped to the key which
+# is the player's first name.
+player_moves = create_player_moves(size)
+ 
+# We take a list of players from the keys in the player_moves dictionary.
+players = player_moves.keys()
 
 # We also need the number of players.
 num_players = len(players)
@@ -243,7 +274,7 @@ wins = create_wins(size)
 board_moves = init_board(size)
 
 # player_turn tracks who is the next player to be asked for a move.
-player_turn = player1
+player_turn = players[0]
 move_count = 0
 for move_count in xrange(0, size**2):  # This is enough moves to fill the board.
     # Print the board based on current moves
@@ -251,12 +282,12 @@ for move_count in xrange(0, size**2):  # This is enough moves to fill the board.
     
     print player_turn+", it is your turn. I will prompt you for row and column."
     print "Use single digits less than "+str(size)+". I will do the rest."
-    row = raw_input("Which row?")
+    row = raw_input("Which row? ")
     row = int(row)
     if ((row in range(0,size)) != True ):
         print "Please try again. The row was invalid."
         continue
-    col = raw_input("Which col?")
+    col = raw_input("Which col? ")
     col = int(col)
     if ((col in range(0,size)) != True ):
         print "({},{}) is not available. Please try again.".format(row,col)
@@ -276,7 +307,7 @@ for move_count in xrange(0, size**2):  # This is enough moves to fill the board.
     # Use the move count to determine the next player in the sequence.
     next_player = move_count % num_players
     player_turn = players[next_player]
-
+    
     for player in players:
         # Now, we check to see if it is possible for either player to win with the moves that are
         # left on the board. That is why the union of player_moves[player] with board_moves, 
