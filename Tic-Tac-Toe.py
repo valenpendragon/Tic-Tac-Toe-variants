@@ -107,7 +107,7 @@ def create_wins(size):
     wins['rows'] = {}         # Initialize the rows dictionary.
     wins['diagonals'] = {}    # Initialize the diagonals dictionary.
 
-    print wins
+    print(wins)
     # There are only two diagonal, up and down. So, we will initialize them as empty sets.
     # We will initialize them at the innermost for loop below.
     wins['diagonals']['down'] = set()

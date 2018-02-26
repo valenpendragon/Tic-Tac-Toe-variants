@@ -11781,7 +11781,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">init_board</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
@@ -11898,12 +11898,149 @@ div#notebook {
         <span class="nb">print</span><span class="p">(</span><span class="n">cells_row3</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">horiz_border</span><span class="p">)</span>
     <span class="k">return</span>
+
+<span class="k">def</span> <span class="nf">create_wins</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function takes a size and returns a dictionary with all of the </span>
+<span class="sd">    winning move combinations in nested dictionaries of move sets.</span>
+<span class="sd">    INPUT: integer size</span>
+<span class="sd">    OUTPUTS: a dictionary of winning built out of three levels of nesting</span>
+<span class="sd">        the contents (see comments in the function.)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># The dictionary of winning moves is going to require three levels</span>
+    <span class="c1"># of nesting. The outermost layer is the &quot;type of win&quot;. The key values</span>
+    <span class="c1"># are: columns, rows, and diagonals.</span>
+    <span class="c1"># diagonals has only two elements until a smaller win size is</span>
+    <span class="c1"># implemented. </span>
+    <span class="c1"># &#39;columns&#39; connects to a nested dictionary with &quot;size&quot; number of keys.</span>
+    <span class="c1"># {columns: {0 : set(coordinates of column0),</span>
+    <span class="c1">#            1 : set(coordinates of column1),</span>
+    <span class="c1">#            ...</span>
+    <span class="c1">#            N : set(cordinates of columnN)}}</span>
+    <span class="c1"># These integer keys then map to a set of coordinates for each column0,</span>
+    <span class="c1"># column1, column2, ..., columnN.</span>
+    <span class="c1"># &#39;rows&#39; has the same kind double nesting. </span>
+    <span class="c1"># &#39;diagonals&#39; has two keys, [&#39;down&#39;, &#39;up&#39;]. These keys, in turn, point</span>
+    <span class="c1"># to their contents:</span>
+    <span class="c1">#      {down: set(coordinates of the down diagonal),</span>
+    <span class="c1">#       up  : set (coordinates of the up diagonal)}.</span>
+
+    <span class="n">wins</span> <span class="o">=</span> <span class="p">{}</span>                 <span class="c1"># Initialize the master dictionary.</span>
+    <span class="n">wins</span><span class="p">[</span><span class="s1">&#39;columns&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>      <span class="c1"># Initialize the columns dictionary.</span>
+    <span class="n">wins</span><span class="p">[</span><span class="s1">&#39;rows&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>         <span class="c1"># Initialize the rows dictionary.</span>
+    <span class="n">wins</span><span class="p">[</span><span class="s1">&#39;diagonals&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>    <span class="c1"># Initialize the diagonals dictionary.</span>
+    <span class="c1"># print(wins)</span>
+    
+    <span class="c1"># There are only two diagonal, up and down.</span>
+    <span class="n">wins</span><span class="p">[</span><span class="s1">&#39;diagonals&#39;</span><span class="p">][</span><span class="s1">&#39;down&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">wins</span><span class="p">[</span><span class="s1">&#39;diagonals&#39;</span><span class="p">][</span><span class="s1">&#39;up&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="c1"># print(wins)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+        <span class="c1"># This for loop will iterate the rows and columns nested</span>
+        <span class="c1"># dictionaries to initialize the sets at the second nested</span>
+        <span class="c1"># level, e.g. wins[&#39;columns&#39;][0] = set(). Although this</span>
+        <span class="c1"># looks like a list, 0 is actually a key.</span>
+        <span class="n">wins</span><span class="p">[</span><span class="s1">&#39;columns&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">wins</span><span class="p">[</span><span class="s1">&#39;rows&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="c1"># The down diagonal has ascending rows and columns. The tough one</span>
+        <span class="c1"># is the up or ascending diagonal. The columns ascend as the rows</span>
+        <span class="c1"># descend. Performing this inside the nested loop would make it</span>
+        <span class="c1"># repeat the steps, without adding anything (sets are unique</span>
+        <span class="c1"># elements).</span>
+        <span class="c1"># rows and columns ascend together for down.</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">col</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">wins</span><span class="p">[</span><span class="s1">&#39;diagonals&#39;</span><span class="p">][</span><span class="s1">&#39;down&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">))</span>
+        <span class="c1"># columns ascend while rows descend.</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">size</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">wins</span><span class="p">[</span><span class="s1">&#39;diagonals&#39;</span><span class="p">][</span><span class="s1">&#39;up&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">))</span>
+    
+        <span class="c1"># Now, we focus on adding the size number of cell coordinates</span>
+        <span class="c1"># that make up row and column wins.</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+            <span class="c1"># Here, j is ascending rows on column i.</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">j</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">wins</span><span class="p">[</span><span class="s1">&#39;columns&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">))</span>
+            <span class="c1"># Here, j is the right moving column in row i.</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="n">j</span>
+            <span class="n">wins</span><span class="p">[</span><span class="s1">&#39;rows&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">))</span>
+    <span class="c1"># print(wins[&#39;columns&#39;])</span>
+    <span class="c1"># print(wins[&#39;rows&#39;])</span>
+    <span class="c1"># print(wins[&#39;diagonals&#39;])</span>
+    <span class="k">return</span> <span class="n">wins</span>
+
+<span class="k">def</span> <span class="nf">win_check</span><span class="p">(</span><span class="n">moves</span><span class="p">,</span> <span class="n">wins</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function takes a set of moves (possible or actual) and checks</span>
+<span class="sd">    to see if any possible winning combination is contained in that set.</span>
+<span class="sd">    If so, it returns True. If not, it returns False.</span>
+<span class="sd">    INPUTS: two arguments</span>
+<span class="sd">        moves (set) a set of moves</span>
+<span class="sd">        winners (dict)</span>
+<span class="sd">            Winners is organized into nested dictionaries: columns, rows,</span>
+<span class="sd">            and diagonals. The keys in cols and rows are integers 0 </span>
+<span class="sd">            through n corresponding to column 0 through n (and rows) on</span>
+<span class="sd">            the actual board. diagonals corresponds to the up and down</span>
+<span class="sd">            diagonals on the board. [At some future point, the logic for</span>
+<span class="sd">            diagonals shorter than the board size for winning conditions</span>
+<span class="sd">            will be added to make the game more interesting.]</span>
+<span class="sd">    OUTPUT: True if a winning combination is contained in the moves, False</span>
+<span class="sd">        otherwise</span>
+<span class="sd">    NOTE: This function can be used to check if a winning combination</span>
+<span class="sd">    exists in the game.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># A few notes on the winners dictionary:</span>
+    <span class="c1"># The dictionary of winning moves has three levels of nesting.</span>
+    <span class="c1"># The outermost layer is the &quot;type of win&quot;. The key values are: </span>
+    <span class="c1"># columns, rows, and diagonals. diagonals has only two elements</span>
+    <span class="c1"># until a smaller win size is implemented. See comments in the</span>
+    <span class="c1"># function, create_wins for more details.</span>
+    
+    <span class="c1"># Note: The keys in &#39;columns&#39; and &#39;rows&#39; are the same, allowing</span>
+    <span class="c1"># them to be iterated together. Once win_len is implemented as</span>
+    <span class="c1"># &lt;= size, there will be more diagonals.</span>
+
+    <span class="c1"># Basically, we iterate through all of the winnning sets in wins</span>
+    <span class="c1"># looking to see if the set moves (a set of all of the player&#39;s</span>
+    <span class="c1"># moves in the game so far) contains one of the winning sets of</span>
+    <span class="c1"># moves. The syntax for this if statement is set1 &lt;= set2 (set1</span>
+    <span class="c1"># is fully contained in set2).</span>
+    
+    <span class="c1"># First, we look at the columns and rows. Iterators allow us to</span>
+    <span class="c1"># work through them quickly.</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">wins</span><span class="p">[</span><span class="s1">&#39;columns&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">wins</span><span class="p">[</span><span class="s1">&#39;columns&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">moves</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">wins</span><span class="p">[</span><span class="s1">&#39;rows&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">moves</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        
+    <span class="c1"># So, a winning combination was not found in the rows or columns.</span>
+    <span class="c1"># Time to check the diagonals.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">wins</span><span class="p">[</span><span class="s1">&#39;diagonals&#39;</span><span class="p">][</span><span class="s1">&#39;up&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">moves</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">wins</span><span class="p">[</span><span class="s1">&#39;diagonals&#39;</span><span class="p">][</span><span class="s1">&#39;down&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">moves</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    
+    <span class="c1"># If the execution made it past all of these tests, no winning</span>
+    <span class="c1"># combination has been found.</span>
+    <span class="k">return</span> <span class="kc">False</span>
 </pre></div>
 
 </div>
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Game-Code">Game Code<a class="anchor-link" href="#Game-Code">&#182;</a></h1>
+</div>
+</div>
 </div>
     </div>
   </div>

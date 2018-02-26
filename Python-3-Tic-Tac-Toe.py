@@ -1,9 +1,9 @@
 
 # coding: utf-8
 
-# #Functions
+# # Functions
 
-# In[4]:
+# In[5]:
 
 
 def init_board(n):
@@ -121,3 +121,134 @@ def print_board(moves,size):
         print(horiz_border)
     return
 
+def create_wins(size):
+    '''
+    This function takes a size and returns a dictionary with all of the 
+    winning move combinations in nested dictionaries of move sets.
+    INPUT: integer size
+    OUTPUTS: a dictionary of winning built out of three levels of nesting
+        the contents (see comments in the function.)
+    '''
+    # The dictionary of winning moves is going to require three levels
+    # of nesting. The outermost layer is the "type of win". The key values
+    # are: columns, rows, and diagonals.
+    # diagonals has only two elements until a smaller win size is
+    # implemented. 
+    # 'columns' connects to a nested dictionary with "size" number of keys.
+    # {columns: {0 : set(coordinates of column0),
+    #            1 : set(coordinates of column1),
+    #            ...
+    #            N : set(cordinates of columnN)}}
+    # These integer keys then map to a set of coordinates for each column0,
+    # column1, column2, ..., columnN.
+    # 'rows' has the same kind double nesting. 
+    # 'diagonals' has two keys, ['down', 'up']. These keys, in turn, point
+    # to their contents:
+    #      {down: set(coordinates of the down diagonal),
+    #       up  : set (coordinates of the up diagonal)}.
+
+    wins = {}                 # Initialize the master dictionary.
+    wins['columns'] = {}      # Initialize the columns dictionary.
+    wins['rows'] = {}         # Initialize the rows dictionary.
+    wins['diagonals'] = {}    # Initialize the diagonals dictionary.
+    # print(wins)
+    
+    # There are only two diagonal, up and down.
+    wins['diagonals']['down'] = set()
+    wins['diagonals']['up'] = set()
+    # print(wins)
+
+    for i in range(0, size):
+        # This for loop will iterate the rows and columns nested
+        # dictionaries to initialize the sets at the second nested
+        # level, e.g. wins['columns'][0] = set(). Although this
+        # looks like a list, 0 is actually a key.
+        wins['columns'][i] = set()
+        wins['rows'][i] = set()
+        # The down diagonal has ascending rows and columns. The tough one
+        # is the up or ascending diagonal. The columns ascend as the rows
+        # descend. Performing this inside the nested loop would make it
+        # repeat the steps, without adding anything (sets are unique
+        # elements).
+        # rows and columns ascend together for down.
+        row = col = i
+        wins['diagonals']['down'].add((row, col))
+        # columns ascend while rows descend.
+        row = size - i - 1
+        col = i
+        wins['diagonals']['up'].add((row, col))
+    
+        # Now, we focus on adding the size number of cell coordinates
+        # that make up row and column wins.
+        for j in range(0, size):
+            # Here, j is ascending rows on column i.
+            row = j
+            col = i
+            wins['columns'][i].add((row, col))
+            # Here, j is the right moving column in row i.
+            row = i
+            col = j
+            wins['rows'][i].add((row, col))
+    # print(wins['columns'])
+    # print(wins['rows'])
+    # print(wins['diagonals'])
+    return wins
+
+def win_check(moves, wins):
+    '''
+    This function takes a set of moves (possible or actual) and checks
+    to see if any possible winning combination is contained in that set.
+    If so, it returns True. If not, it returns False.
+    INPUTS: two arguments
+        moves (set) a set of moves
+        winners (dict)
+            Winners is organized into nested dictionaries: columns, rows,
+            and diagonals. The keys in cols and rows are integers 0 
+            through n corresponding to column 0 through n (and rows) on
+            the actual board. diagonals corresponds to the up and down
+            diagonals on the board. [At some future point, the logic for
+            diagonals shorter than the board size for winning conditions
+            will be added to make the game more interesting.]
+    OUTPUT: True if a winning combination is contained in the moves, False
+        otherwise
+    NOTE: This function can be used to check if a winning combination
+    exists in the game.
+    '''
+    # A few notes on the winners dictionary:
+    # The dictionary of winning moves has three levels of nesting.
+    # The outermost layer is the "type of win". The key values are: 
+    # columns, rows, and diagonals. diagonals has only two elements
+    # until a smaller win size is implemented. See comments in the
+    # function, create_wins for more details.
+    
+    # Note: The keys in 'columns' and 'rows' are the same, allowing
+    # them to be iterated together. Once win_len is implemented as
+    # <= size, there will be more diagonals.
+
+    # Basically, we iterate through all of the winnning sets in wins
+    # looking to see if the set moves (a set of all of the player's
+    # moves in the game so far) contains one of the winning sets of
+    # moves. The syntax for this if statement is set1 <= set2 (set1
+    # is fully contained in set2).
+    
+    # First, we look at the columns and rows. Iterators allow us to
+    # work through them quickly.
+    for key in wins['columns'].iterkeys():
+        if (wins['columns'][key] <= moves):
+            return True
+        if (wins['rows'][key] <= moves):
+            return True
+        
+    # So, a winning combination was not found in the rows or columns.
+    # Time to check the diagonals.
+    if (wins['diagonals']['up'] <= moves):
+        return True
+    if (wins['diagonals']['down'] <= moves):
+        return True
+    
+    # If the execution made it past all of these tests, no winning
+    # combination has been found.
+    return False
+
+
+# # Game Code
