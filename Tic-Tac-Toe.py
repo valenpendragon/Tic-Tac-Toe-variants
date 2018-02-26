@@ -1,4 +1,10 @@
-#!/c/ProgramData/Anaconda2/python
+
+# coding: utf-8
+
+# Placeholder for functions
+
+# In[1]:
+
 
 def init_board(n):
     '''
@@ -219,6 +225,33 @@ def create_player_moves(size):
         ready_to_play = raw_input("Are all of the players ready to start? ")
     return player_moves
 
+
+# When it asks for player names, this needs to be made into a more generic approach (loop or iterator) -- Done
+# 
+# The same is true for initializing player_moves. -- Done
+# 
+# There needs to be a little better spacing between names and questions. -- Done
+# 
+# I need to include instructions not to use the same first letter in naming a new player. I may need to have something check that in create_player_moves.
+# 
+# I need to convert the y/n answers to .lower().startswith('y') to make those simpler.
+# 
+# It might be nice to include a list of players who cannot win each time the board prints out. [This could be done by passing can_win to print_board and having it check for each player in there. I need to use a try/except combo to trap errors from keys not in the can_win dictionary.
+# 
+# I should consider adding in the ability to clear a terminal (or iPython display). The syntax for iPython display is:
+#     from IPython.display import clear_output
+# then use clear_input() function to clear the i/o area on screen.
+# A crude way to do might be exec(clear) to get the 'OS' to execute a clear.
+# 
+# Do I want to make the coordinate maps more intuitive (aka, add 1 to them before they print out)? That would require a lot of work to accomplish, but it might also be worth it. Actually, it's easy to do in print_board since it uses nested for loops. It doesn't look too bad to do in the main body. There, I just alter the text output. I also need to subtract 1 from row and col, while displaying row+1 and col+1 throughout.
+# 
+# I also like his random choice of first player. That might be worth implementing.
+# 
+# His advanced solution has a rematch option. That might be worth implementing or including a memory option that saves player names to lists.
+
+# In[2]:
+
+
 print "Hello. You have accessed Tic Tac Toe."
 print "The default board is 3x3 and the winner must control three"
 print "spaces in a row, column, or diagonal to win."
@@ -282,12 +315,12 @@ for move_count in xrange(0, size**2):  # This is enough moves to fill the board.
     
     print player_turn+", it is your turn. I will prompt you for row and column."
     print "Use single digits less than "+str(size)+". I will do the rest."
-    row = raw_input("Which row? ")
+    row = raw_input("Which row?")
     row = int(row)
     if ((row in range(0,size)) != True ):
         print "Please try again. The row was invalid."
         continue
-    col = raw_input("Which col? ")
+    col = raw_input("Which col?")
     col = int(col)
     if ((col in range(0,size)) != True ):
         print "({},{}) is not available. Please try again.".format(row,col)
@@ -338,4 +371,5 @@ for move_count in xrange(0, size**2):  # This is enough moves to fill the board.
                 continue
         else:
             continue     # This ensures that the loop will continue when it should.
-    break # This ensures than any nested break leave the outermost loop as well.
+    break # This ensures than any nested break leave the outermost loop as well.0
+
