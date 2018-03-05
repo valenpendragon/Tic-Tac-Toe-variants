@@ -11781,7 +11781,20 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#pip.main([&#39;install&#39;, &#39;num2words&#39;])</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">init_board</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
@@ -11810,13 +11823,13 @@ div#notebook {
 <span class="sd">    OUTPUT: None. All output goes to the screen.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c1"># First, we need to get the player names out of the dictionary.</span>
-    <span class="n">players</span> <span class="o">=</span> <span class="n">moves</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="n">players</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">moves</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
     <span class="c1"># Since dictionaries are mapptings, not ordered data objects, we need to </span>
     <span class="c1"># print the first character of the player&#39;s name in a diamond shape in the</span>
     <span class="c1"># square. This also opens the way for more than two players to play at some</span>
     <span class="c1"># point. This loop assigns all of the players to their first letter.</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">players</span><span class="p">)):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">players</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39; is represented by &#39;</span><span class="o">+</span><span class="n">players</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">&#39; is represented by </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">players</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">players</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
 
     <span class="c1"># We make the top/bottom border.</span>
     <span class="n">h_border_char</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span>  <span class="c1"># This is the horizontal character used.</span>
@@ -12011,7 +12024,7 @@ div#notebook {
     
     <span class="c1"># First, we look at the columns and rows. Iterators allow us to</span>
     <span class="c1"># work through them quickly.</span>
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">wins</span><span class="p">[</span><span class="s1">&#39;columns&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">wins</span><span class="p">[</span><span class="s1">&#39;columns&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">wins</span><span class="p">[</span><span class="s1">&#39;columns&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">moves</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">wins</span><span class="p">[</span><span class="s1">&#39;rows&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">moves</span><span class="p">):</span>
@@ -12027,6 +12040,91 @@ div#notebook {
     <span class="c1"># If the execution made it past all of these tests, no winning</span>
     <span class="c1"># combination has been found.</span>
     <span class="k">return</span> <span class="kc">False</span>
+
+<span class="k">def</span> <span class="nf">create_player_moves</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function takes an integer size. From there, it will prompt</span>
+<span class="sd">    the players for how many players actually want to play. It will</span>
+<span class="sd">    allow up to size - 1 to give the players some chance of winning.</span>
+<span class="sd">    It will return an initialized player_moves dictionary. This</span>
+<span class="sd">    dictionary maps the player&#39;s name to a set of tuples (x,y)</span>
+<span class="sd">    representing the two-dimensional coordinates of every move the</span>
+<span class="sd">    player will make in the game. create_player_moves does that for</span>
+<span class="sd">    every player in the game.</span>
+<span class="sd">    INPUT: integer size for the size of the size x size board</span>
+<span class="sd">    OUTPUT: dictionary player_moves, initialized with all player</span>
+<span class="sd">        names mapped to empty sets ready to receive their moves.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Initialize the player_moves dictionary.</span>
+    <span class="n">player_moves</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">max_players</span> <span class="o">=</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;To increase the likelihood of a player winning, this game&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;limits the number of players to one less than the size of&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;the board.&quot;</span><span class="p">)</span>
+    <span class="n">num_players</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">num_players</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">num_players</span> <span class="o">&gt;=</span> <span class="n">size</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Due to the small size of the board (3x3), this game will&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;default to 2 players.&quot;</span><span class="p">)</span>
+            <span class="n">num_players</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_num</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Please choose a number between 2 and </span><span class="si">{0}</span><span class="s2">: &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">max_players</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">num_players</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_num</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;That number was invalid. Please try again.&quot;</span><span class="p">)</span>
+            <span class="c1"># Note: Either num_players is non-zero, or the string could</span>
+            <span class="c1"># not be converted to an integer. Either way, the while</span>
+            <span class="c1"># loop will handle it correctly.</span>
+
+    <span class="c1"># Anaconda makes it very very difficult to add modules, like</span>
+    <span class="c1"># num2words to the installation because it creates so many </span>
+    <span class="c1"># in ProgramData and AppData. One of these is not getting the</span>
+    <span class="c1"># right update to add it. conda does not recognize the package;</span>
+    <span class="c1"># so, I am still stuck with using an ordinal words list, which</span>
+    <span class="c1"># limits this program to 9x9.</span>
+    <span class="n">ordinal_words</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;first&#39;</span><span class="p">,</span> <span class="s1">&#39;second&#39;</span><span class="p">,</span> <span class="s1">&#39;third&#39;</span><span class="p">,</span> <span class="s1">&#39;fourth&#39;</span><span class="p">,</span> <span class="s1">&#39;fifth&#39;</span><span class="p">,</span> <span class="s1">&#39;sixth&#39;</span><span class="p">,</span> <span class="s1">&#39;seventh&#39;</span><span class="p">,</span> <span class="s1">&#39;eighth&#39;</span><span class="p">]</span>
+    
+    <span class="c1"># Now, we initialize the player_moves dictionary. We need a name</span>
+    <span class="c1"># (string) for each player, which will be added to the keys of</span>
+    <span class="c1"># the dictionary. Each name will be mapped to a set of tuples that</span>
+    <span class="c1"># starts out empty). The set stores that players moves throughout</span>
+    <span class="c1"># the game.</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Please enter the names of the players. Do not duplicate&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;first initials to avoid confusion between players.&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_players</span><span class="p">):</span>
+        <span class="n">player_name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;What is the name of the player? &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ordinal_words</span><span class="p">[</span><span class="n">num</span><span class="p">]))</span>
+        <span class="n">player_moves</span><span class="p">[</span><span class="n">player_name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Confirming that the </span><span class="si">{0}</span><span class="s2"> will be </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ordinal_words</span><span class="p">[</span><span class="n">num</span><span class="p">],</span> <span class="n">player_name</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">player_moves</span><span class="p">)</span>
+    <span class="n">ready_to_play</span> <span class="o">=</span> <span class="s1">&#39;n&#39;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">ready_to_play</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;y&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">ready_to_play</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;yes&#39;</span><span class="p">):</span>
+        <span class="n">ready_to_play</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Are all of the players ready to start? (y/n) &quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">player_moves</span>
+
+<span class="c1"># This is a new function created for the Python3 conversion.</span>
+<span class="k">def</span> <span class="nf">get_number</span><span class="p">(</span><span class="n">coord_type</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function asks the players for a number, either for a row or column</span>
+<span class="sd">    number, determined by coord_type. It uses size to determine if the </span>
+<span class="sd">    number is a valid choice before returing this value.</span>
+<span class="sd">    INPUTS: two arguments</span>
+<span class="sd">        coord_type: string, no default, only &#39;row&#39; or &#39;column&#39; are valid</span>
+<span class="sd">        size: integer, no default</span>
+<span class="sd">    OUTPUTS: integer between 0 and size</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">choice</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">while</span> <span class="n">choice</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+        <span class="c1"># choice must be a valid row or column choice or the while loop</span>
+        <span class="c1"># will not stop iterating. It must be an integer in the range</span>
+        <span class="c1"># [0, size].</span>
+        <span class="n">trial</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Which </span><span class="si">{0}</span><span class="s2">? &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">coord_type</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">choice</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">trial</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> must be between 0 and </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">coord_type</span><span class="p">,</span><span class="n">size</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Please try again.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">choice</span>
 </pre></div>
 
 </div>
@@ -12041,6 +12139,1549 @@ div#notebook {
 <h1 id="Game-Code">Game Code<a class="anchor-link" href="#Game-Code">&#182;</a></h1>
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello. Welcome to Tic Tac Toe.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The default board is 3x3 and the winner must control three&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;spaces in a row, column, or diagonal to win. The boards are square.&quot;</span><span class="p">)</span>
+<span class="n">option</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Would you like a larger board? (y/n):&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span><span class="p">):</span>
+    <span class="c1"># new_size is a str that will be passed to size as an integer.</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">size</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+        <span class="n">new_size</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Choose a board size between 3 and 9:&quot;</span><span class="p">)</span>
+        <span class="c1"># This option keeps the program in the loop until a valid</span>
+        <span class="c1"># integer for the size is chosen.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_size</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> is an invalid board size. Please try again.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_size</span><span class="p">))</span>
+            <span class="k">continue</span>
+                
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Board will be the default size of 3x3.&quot;</span><span class="p">)</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="c1"># The create_player_moves function initializes the dictionary that</span>
+<span class="c1"># stores the player moves as sets of (x,y) tuples (coordinates)</span>
+<span class="c1"># mapped to the key which is the player&#39;s first name.</span>
+<span class="n">player_moves</span> <span class="o">=</span> <span class="n">create_player_moves</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+ 
+<span class="c1"># We make a list of players from the keys in the player_moves</span>
+<span class="c1"># dictionary. The items are sets of each player&#39;s moves. Sets</span>
+<span class="c1"># are used to prevent duplication.</span>
+<span class="n">players</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">player_moves</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+<span class="c1"># We also need the number of players.</span>
+<span class="n">num_players</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">players</span><span class="p">)</span>
+
+<span class="c1"># can_win is a very small dictionary with a player name matched</span>
+<span class="c1"># to a True/False flag. When a player is no longer able to win,</span>
+<span class="c1"># their entry is removed from the dictionary. Once the</span>
+<span class="c1"># dictionary is empty, the game ends in a draw. We populate this</span>
+<span class="c1"># </span>
+<span class="n">can_win</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="n">players</span><span class="p">:</span>
+    <span class="n">can_win</span><span class="p">[</span><span class="n">player</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1"># Now, we need to create a dictionary of winning moves. The wins</span>
+<span class="c1"># dictionary is fully described in the comments in the function</span>
+<span class="c1"># create_wins() above.</span>
+<span class="n">wins</span> <span class="o">=</span> <span class="n">create_wins</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+
+<span class="c1"># Next, we need to initialize the set board_moves. This stores all</span>
+<span class="c1"># of the possible moves that can be made in the game. Using a set</span>
+<span class="c1"># ensures that there can be no duplication of moves.As a player</span>
+<span class="c1"># takes a cell, tis coordinate tuple (horizontal, verticle), will</span>
+<span class="c1"># removed from board_moves and added to their set of moves in the </span>
+<span class="c1"># player_moves dictionary. This set is composed of coordinates</span>
+<span class="c1"># corresponding to the coordinate blocks printed in each game cell.</span>
+<span class="n">board_moves</span> <span class="o">=</span> <span class="n">init_board</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+
+<span class="c1"># The player_turn variable tracks which player is next in line to</span>
+<span class="c1"># make a move on the board. move_count iterates through all of the</span>
+<span class="c1"># possible moves on the board, although the game has code to end</span>
+<span class="c1"># the game when a winner is found or a stalemate has been reached.</span>
+<span class="c1"># We have a boolean player_won. A player win will flip this flag.</span>
+<span class="c1"># A second boolean, stalemate, becomes True is no players have</span>
+<span class="c1"># any moves left that can win the game.</span>
+<span class="n">player_turn</span> <span class="o">=</span> <span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">move_count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">player_won</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">stalemate</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">while</span> <span class="n">move_count</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">**</span><span class="mi">2</span><span class="p">:</span>  <span class="c1"># Game move loop</span>
+    <span class="c1"># Print the board based on current moves. It does this each</span>
+    <span class="c1"># iteration before prompting the next player for a move.</span>
+    <span class="n">print_board</span><span class="p">(</span><span class="n">player_moves</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">, it is your turn. I will prompt you for row and column.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">player_turn</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Please use single digits less than </span><span class="si">{0}</span><span class="s2">. I will do the rest.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">size</span><span class="p">)))</span>
+    <span class="c1"># We use a second while loop to make sure that the space is</span>
+    <span class="c1"># not occupied. The valid_move boolean is used to control</span>
+    <span class="c1"># this loop. The funcion, get_number makes sure that the row</span>
+    <span class="c1"># and column choices are integers between 0 and size.</span>
+    <span class="n">valid_move</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">valid_move</span><span class="p">:</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">get_number</span><span class="p">(</span><span class="s1">&#39;row&#39;</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">get_number</span><span class="p">(</span><span class="s1">&#39;column&#39;</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">row</span><span class="p">,</span><span class="n">col</span><span class="p">)</span> <span class="ow">in</span> <span class="n">board_moves</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(</span><span class="si">{0}</span><span class="s2">, </span><span class="si">{1}</span><span class="s2">) is empty. Registering the move.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">))</span>
+            <span class="c1"># Record the player&#39;s move.</span>
+            <span class="n">player_moves</span><span class="p">[</span><span class="n">player_turn</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">row</span><span class="p">,</span><span class="n">col</span><span class="p">))</span>
+            <span class="c1"># Remove their choice from availale moves.</span>
+            <span class="n">board_moves</span><span class="o">.</span><span class="n">discard</span><span class="p">((</span><span class="n">row</span><span class="p">,</span><span class="n">col</span><span class="p">))</span>
+            <span class="c1"># Increment the move count</span>
+            <span class="n">move_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">valid_move</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># That cell is already occupied.</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;That cell is already occupied. Please choose another.&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+    <span class="c1"># The move has been registerd. We need to print the board</span>
+    <span class="c1"># again to reflect the change.</span>
+    <span class="n">print_board</span><span class="p">(</span><span class="n">player_moves</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+    
+    <span class="c1"># Only the player who just made a move can win in any</span>
+    <span class="c1"># event. win_check returns a boolean. With the options</span>
+    <span class="c1"># below, it will return Turn that the player who just</span>
+    <span class="c1"># moved won, and False, if not.</span>
+    <span class="k">if</span> <span class="n">win_check</span><span class="p">(</span><span class="n">player_moves</span><span class="p">[</span><span class="n">player_turn</span><span class="p">],</span> <span class="n">wins</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Congratulations, </span><span class="si">{0}</span><span class="s2">, you won the game.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">player_turn</span><span class="p">))</span>
+        <span class="n">player_won</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">break</span> <span class="c1"># This break ends the outermost loop.</span>
+    
+    <span class="c1"># This routine was moved down and the block handling</span>
+    <span class="c1"># player win checks was added above.</span>
+    <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="n">players</span><span class="p">:</span>
+        <span class="c1"># Now, we check to see if it is possible for any player</span>
+        <span class="c1"># to win with the moves that are left on the board. That</span>
+        <span class="c1"># is why the union of player_moves[player] with</span>
+        <span class="c1"># board_moves, the remaining open cells, is checked for</span>
+        <span class="c1"># winning conditions. A False return means that the</span>
+        <span class="c1"># player cannot win. If that results come up, the</span>
+        <span class="c1"># player is removed from can_win list.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">win_check</span><span class="p">(</span><span class="n">player_moves</span><span class="p">[</span><span class="n">player</span><span class="p">]</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">board_moves</span><span class="p">),</span> <span class="n">wins</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">player</span> <span class="ow">in</span> <span class="n">can_win</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">can_win</span><span class="p">[</span><span class="n">player</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> no longer has any moves that will win the game.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">player</span><span class="p">))</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">can_win</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No players have moves that can win the game. This game is a draw.&quot;</span><span class="p">)</span>
+        <span class="n">stalemate</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">break</span>  <span class="c1"># This break ends the outermost loop.</span>
+
+    <span class="c1"># Getting this far (the end of the move loop, the game</span>
+    <span class="c1"># may still be winnable. Use the move count to determine</span>
+    <span class="c1"># the next player in the sequence.</span>
+    <span class="n">next_player</span> <span class="o">=</span> <span class="n">move_count</span> <span class="o">%</span> <span class="n">num_players</span>
+    <span class="n">player_turn</span> <span class="o">=</span> <span class="n">players</span><span class="p">[</span><span class="n">next_player</span><span class="p">]</span>
+    <span class="c1"># End of game move loop.</span>
+
+<span class="c1"># In case the game reached this point with all spaces on</span>
+<span class="c1"># the board filled without a winner, we need to declare a</span>
+<span class="c1"># draw. The stalemate flag and player_won flag show which</span>
+<span class="c1"># options occurred. If they are unchanged, the game ended</span>
+<span class="c1"># with a full board. This is unlikely to happen without</span>
+<span class="c1"># can_win emptying first, but we have to allow for it.</span>
+<span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">player_won</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">stalemate</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The game board is full, but no player won the game.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The game is a draw.&quot;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Hello. Welcome to Tic Tac Toe.
+The default board is 3x3 and the winner must control three
+spaces in a row, column, or diagonal to win. The boards are square.
+Would you like a larger board? (y/n):y
+Choose a board size between 3 and 9:6
+To increase the likelihood of a player winning, this game
+limits the number of players to one less than the size of
+the board.
+Please choose a number between 2 and 5: 2
+Please enter the names of the players. Do not duplicate
+first initials to avoid confusion between players.
+What is the name of the player? jeff
+Confirming that the first will be jeff
+What is the name of the player? fred
+Confirming that the second will be fred
+{&#39;jeff&#39;: set(), &#39;fred&#39;: set()}
+Are all of the players ready to start? (y/n) y
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 0
+Which column? 0
+(0, 0) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     |     |
+| jjj |     |     |     |     |     |
+| jjj |     |     |     |     |     |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     |     |
+| jjj |     |     |     |     |     |
+| jjj |     |     |     |     |     |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+fred, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 0
+Which column? 5
+(0, 5) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 1
+Which column? 1
+(1, 1) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+|     | jjj |     |     |     |     |
+|     | jjj |     |     |     |     |
+|     | jjj |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+|     | jjj |     |     |     |     |
+|     | jjj |     |     |     |     |
+|     | jjj |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+fred, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 2
+Which column? 2
+(2, 2) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+|     | jjj |     |     |     |     |
+|     | jjj |     |     |     |     |
+|     | jjj |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+|     |     | fff |     |     |     |
+|     |     | fff |     |     |     |
+|     |     | fff |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+|     | jjj |     |     |     |     |
+|     | jjj |     |     |     |     |
+|     | jjj |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+|     |     | fff |     |     |     |
+|     |     | fff |     |     |     |
+|     |     | fff |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 1
+Which column? 0
+(1, 0) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+|     |     | fff |     |     |     |
+|     |     | fff |     |     |     |
+|     |     | fff |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+|     |     | fff |     |     |     |
+|     |     | fff |     |     |     |
+|     |     | fff |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+fred, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 2
+Which column? 0
+(2, 0) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff |     | fff |     |     |     |
+| fff |     | fff |     |     |     |
+| fff |     | fff |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff |     | fff |     |     |     |
+| fff |     | fff |     |     |     |
+| fff |     | fff |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 2
+Which column? 1
+(2, 1) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+fred, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 3
+Which column? 1
+(3, 1) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+| jjj | jjj |     |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 1
+Which column? 2
+(1, 2) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     |     |     |
+| jjj | jjj | jjj |     |     |     |
+| jjj | jjj | jjj |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     |     |     |
+| jjj | jjj | jjj |     |     |     |
+| jjj | jjj | jjj |     |     |     |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+fred, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 1
+Which column? 5
+(1, 5) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     |     | fff |
+| jjj | jjj | jjj |     |     | fff |
+| jjj | jjj | jjj |     |     | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     |     | fff |
+| jjj | jjj | jjj |     |     | fff |
+| jjj | jjj | jjj |     |     | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+| fff | jjj | fff |     |     |     |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 2
+Which column? 5
+(2, 5) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     |     | fff |
+| jjj | jjj | jjj |     |     | fff |
+| jjj | jjj | jjj |     |     | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     |     | fff |
+| jjj | jjj | jjj |     |     | fff |
+| jjj | jjj | jjj |     |     | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+fred, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 1
+Which column? 4
+(1, 4) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+jeff, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 5
+Which column? 0
+(5, 0) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+| jjj |     |     |     |     |     |
+| jjj |     |     |     |     |     |
+| jjj |     |     |     |     |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+| jjj |     |     |     |     |     |
+| jjj |     |     |     |     |     |
+| jjj |     |     |     |     |     |
+_____________________________________
+fred, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 5
+Which column? 4
+(5, 4) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+| fff | jjj | fff |     |     | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+_____________________________________
+jeff, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 2
+Which column? 4
+(2, 4) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+|     | fff |     |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+_____________________________________
+fred, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 3
+Which column? 2
+(3, 2) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff | fff |     |     |     |
+|     | fff | fff |     |     |     |
+|     | fff | fff |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff | fff |     |     |     |
+|     | fff | fff |     |     |     |
+|     | fff | fff |     |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+_____________________________________
+jeff, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 3
+Which column? 3
+(3, 3) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff | fff | jjj |     |     |
+|     | fff | fff | jjj |     |     |
+|     | fff | fff | jjj |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+_____________________________________
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff | fff | jjj |     |     |
+|     | fff | fff | jjj |     |     |
+|     | fff | fff | jjj |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+|     |     |     |     |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+_____________________________________
+fred, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 4
+Which column? 3
+(4, 3) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff | fff | jjj |     |     |
+|     | fff | fff | jjj |     |     |
+|     | fff | fff | jjj |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     | fff |     |     |
+|     |     |     | fff |     |     |
+|     |     |     | fff |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+_____________________________________
+jeff no longer has any moves that will win the game.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff | fff | jjj |     |     |
+|     | fff | fff | jjj |     |     |
+|     | fff | fff | jjj |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     |     | fff |     |     |
+|     |     |     | fff |     |     |
+|     |     |     | fff |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+_____________________________________
+jeff, it is your turn. I will prompt you for row and column.
+Please use single digits less than 6. I will do the rest.
+Which row? 4
+Which column? 2
+(4, 2) is empty. Registering the move.
+jeff&#39; is represented by j
+fred&#39; is represented by f
+_____________________________________
+|(0,0)|(0,1)|(0,2)|(0,3)|(0,4)|(0,5)|
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+| jjj |     |     |     |     | fff |
+_____________________________________
+|(1,0)|(1,1)|(1,2)|(1,3)|(1,4)|(1,5)|
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+| jjj | jjj | jjj |     | fff | fff |
+_____________________________________
+|(2,0)|(2,1)|(2,2)|(2,3)|(2,4)|(2,5)|
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+| fff | jjj | fff |     | jjj | jjj |
+_____________________________________
+|(3,0)|(3,1)|(3,2)|(3,3)|(3,4)|(3,5)|
+|     | fff | fff | jjj |     |     |
+|     | fff | fff | jjj |     |     |
+|     | fff | fff | jjj |     |     |
+_____________________________________
+|(4,0)|(4,1)|(4,2)|(4,3)|(4,4)|(4,5)|
+|     |     | jjj | fff |     |     |
+|     |     | jjj | fff |     |     |
+|     |     | jjj | fff |     |     |
+_____________________________________
+|(5,0)|(5,1)|(5,2)|(5,3)|(5,4)|(5,5)|
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+| jjj |     |     |     | fff |     |
+_____________________________________
+fred no longer has any moves that will win the game.
+No players have moves that can win the game. This game is a draw.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
     </div>
   </div>
